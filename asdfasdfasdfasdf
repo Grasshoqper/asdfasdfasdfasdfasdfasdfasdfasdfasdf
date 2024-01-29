@@ -137,7 +137,7 @@ public class Robot extends TimedRobot {
     {
       intakePivot.set(-intakePivotSpeed);
     }
-    else if (driveController.getBButtonPressed()) //Amp Sequence
+    else if (driveController.getBButtonPressed()) //Amp Sequence -> HOLD IT DOWN TILL COMPLETE
     {
       flywheelA.set(flywheelAmpSpeed);
       flywheelB.set(flywheelAmpSpeed);
@@ -153,14 +153,14 @@ public class Robot extends TimedRobot {
       intakeA.set(0);
       intakeA.set(0);
     }
-    else if (driveController.getYButtonPressed()) //Speaker Sequence
+    else if (driveController.getYButtonPressed()) //Speaker Sequence -> HOLD IT DOWN TILL COMPLETE
     {
       flywheelA.set(flywheelSpeakerSpeed);
       flywheelB.set(flywheelSpeakerSpeed);
       intakeA.set(outakeSpeed);
       intakeB.set(outakeSpeed);
     }
-    else if (driveController.getYButtonReleased()) //Speaker Sequence
+    else if (driveController.getYButtonReleased()) 
     {
       flywheelA.set(0);
       flywheelB.set(0);
@@ -168,11 +168,11 @@ public class Robot extends TimedRobot {
       intakeB.set(0);
 
     }
-    else if (driveController.getLeftBumperPressed()) //Reverse Drive Controls
+    else if (driveController.getLeftStickButtonPressed()) //Reverse Drive Controls
     {
       double turn = (-driveController.getRightX() * -1);
     }
-    else if (driveController.getRightBumperPressed()) //Kill Motors
+    else if (driveController.getRightStickButtonPressed()) //Kill Motors
     {
       driveLeftA.set(0);
       driveLeftB.set(0);
