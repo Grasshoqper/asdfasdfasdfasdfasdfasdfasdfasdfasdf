@@ -134,6 +134,22 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    double forward = -driveController.getLeftY();
+    double turn = -driveController.getRightX();
+
+    double driveLeftPower = forward - turn;
+    double driveRightPower = forward + turn;
+
+    driveLeftA.set(driveLeftPower);
+    driveLeftB.set(driveLeftPower);
+    driveRightA.set(driveRightPower);
+    driveRightB.set(driveRightPower);
+
+    if (driveController.getLeftStickButtonPressed()) //Reverse Drive Controls
+    {
+        double turn = (turn * -1);
+      }  
+    }
     if (driveController.getAButtonPressed()) //Intake Down
     {
       intakePivot.set(intakePivotSpeed);
