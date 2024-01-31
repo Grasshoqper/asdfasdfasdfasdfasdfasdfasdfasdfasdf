@@ -116,6 +116,11 @@ public class Robot extends TimedRobot {
   driveLeftB.set(driveLeftPower);
   driveRightA.set(driveRightPower);
   driveRightB.set(driveRightPower);
+
+  if (driveController.getLeftStickButtonPressed()) //Reverse Drive Controls
+    {
+      double turn = (-driveController.getRightX() * -1);
+    }  
   }
 
   @Override
@@ -168,11 +173,8 @@ public class Robot extends TimedRobot {
       intakeB.set(0);
 
     }
-    else if (driveController.getLeftStickButtonPressed()) //Reverse Drive Controls
-    {
-      double turn = (-driveController.getRightX() * -1);
-    }
-    else if (driveController.getRightStickButtonPressed()) //Kill Motors
+    
+    if (driveController.getRightStickButtonPressed()) //Kill Motors
     {
       driveLeftA.set(0);
       driveLeftB.set(0);
