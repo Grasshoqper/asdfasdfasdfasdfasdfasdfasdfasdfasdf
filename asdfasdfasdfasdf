@@ -119,7 +119,7 @@ public class Robot extends TimedRobot {
 
   if (driveController.getLeftStickButtonPressed()) //Reverse Drive Controls
     {
-      double turn = (-driveController.getRightX() * -1);
+      double turn = (turn * -1);
     }  
   }
 
