@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.XboxController;
@@ -10,12 +11,11 @@ import edu.wpi.first.wpilibj.DigitalInput;
 public class Robot extends TimedRobot {
   //Motors:
   VictorSP driveLeftA = new VictorSP(1);
-  CANSparkMax driveLeftB = new CANSparkMax(2, MotorType.kBrushed);
+  VictorSP driveLeftB = new VictorSP(2);
   VictorSP driveRightA = new VictorSP(3);
-  CANSparkMax driveRightB = new CANSparkMax(4, MotorType.kBrushed);
+  VictorSP driveRightB = new VictorSP(4);
   CANSparkMax intakePivot = new CANSparkMax(5, MotorType.kBrushless);
-  VictorSP intakeA = new VictorSP(6);
-  VictorSP intakeB = new VictorSP(7);
+  CANSparkMax intake = new CANSparkMax(6, MotorType.kBrushless);
   CANSparkMax flywheelA = new CANSparkMax(8, MotorType.kBrushless);
   CANSparkMax flywheelB = new CANSparkMax(9, MotorType.kBrushless);
   CANSparkMax flap = new CANSparkMax(10, MotorType.kBrushless);
@@ -68,14 +68,12 @@ public class Robot extends TimedRobot {
   //Directionals
   driveLeftA.setInverted(true);
   driveLeftB.setInverted(true);
-  driveLeftB.burnFlash();
   driveRightA.setInverted(false);
   driveRightB.setInverted(false);
-  driveRightB.burnFlash();
   intakePivot.setInverted(false);
   intakePivot.burnFlash();
-  intakeA.setInverted(false);
-  intakeB.setInverted(true);
+  intake.setInverted(false);
+  intake.burnFlash();
   flywheelA.setInverted(false);
   flywheelA.burnFlash();
   flywheelB.setInverted(true);
@@ -83,7 +81,9 @@ public class Robot extends TimedRobot {
   flap.setInverted(false);
   flap.burnFlash();
   climbLeft.setInverted(false);
+  climbLeft.burnFlash();
   climbRight.setInverted(false);
+  climbRight.burnFlash();
 
   //Setting Motors Off
   driveLeftA.set(0);
@@ -91,8 +91,7 @@ public class Robot extends TimedRobot {
   driveRightA.set(0);
   driveRightB.set(0);
   intakePivot.set(0);
-  intakeA.set(0);
-  intakeB.set(0);
+  intake.set(0);
   flywheelA.set(0);
   flywheelB.set(0);
   flap.set(0);
@@ -154,31 +153,26 @@ public class Robot extends TimedRobot {
       flywheelA.set(flywheelAmpSpeed);
       flywheelB.set(flywheelAmpSpeed);
       flap.set(flapSpeed);
-      intakeA.set(outakeSpeed + 0.15);
-      intakeA.set(outakeSpeed + 0.15);
+      intake.set(outakeSpeed + 0.15);
     }
     else if (driveController.getBButtonReleased())
     {
       flywheelA.set(0);
       flywheelB.set(0);
       flap.set(-flapSpeed);
-      intakeA.set(0);
-      intakeA.set(0);
+      intake.set(0);
     }
     else if (driveController.getYButtonPressed()) //Speaker Sequence -> HOLD IT DOWN TILL COMPLETE
     {
       flywheelA.set(flywheelSpeakerSpeed);
       flywheelB.set(flywheelSpeakerSpeed - 5);
-      intakeA.set(outakeSpeed);
-      intakeB.set(outakeSpeed);
+      intake.set(outakeSpeed);
     }
     else if (driveController.getYButtonReleased()) 
     {
       flywheelA.set(0);
       flywheelB.set(0);
-      intakeA.set(0);
-      intakeB.set(0);
-
+      intake.set(0);
     }
     
     if (driveController.getRightStickButtonPressed()) //Kill Motors
@@ -188,8 +182,7 @@ public class Robot extends TimedRobot {
       driveRightA.set(0);
       driveRightB.set(0);
       intakePivot.set(0);
-      intakeA.set(0);
-      intakeB.set(0);
+      intake.set(0);
       flywheelA.set(0);
       flywheelB.set(0);
       flap.set(0);
@@ -209,8 +202,7 @@ public class Robot extends TimedRobot {
 
     if (intakeActive)
     {
-      intakeA.set(intakeSpeed);
-      intakeB.set(intakeSpeed);
+      intake.set(intakeSpeed);
     }
     
     //Outake
@@ -225,8 +217,7 @@ public class Robot extends TimedRobot {
 
     if (outakeActive)
     {
-      intakeA.set(outakeSpeed);
-      intakeB.set(outakeSpeed);
+      intake.set(outakeSpeed);
     }
 
     //Climb
@@ -276,8 +267,7 @@ public class Robot extends TimedRobot {
   driveRightA.set(0);
   driveRightB.set(0);
   intakePivot.set(0);
-  intakeA.set(0);
-  intakeB.set(0);
+  intake.set(0);
   flywheelA.set(0);
   flywheelB.set(0);
 
