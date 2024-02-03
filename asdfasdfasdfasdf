@@ -2,22 +2,25 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj.DigitalInput; 
 
 public class Robot extends TimedRobot {
   //Motors:
-  CANSparkMax driveLeftA = new CANSparkMax(1, MotorType.kBrushed);
+  VictorSP driveLeftA = new VictorSP(1);
   CANSparkMax driveLeftB = new CANSparkMax(2, MotorType.kBrushed);
-  CANSparkMax driveRightA = new CANSparkMax(3, MotorType.kBrushed);
+  VictorSP driveRightA = new VictorSP(3);
   CANSparkMax driveRightB = new CANSparkMax(4, MotorType.kBrushed);
-  CANSparkMax intakePivot = new CANSparkMax(3, MotorType.kBrushless);
-  CANSparkMax intakeA = new CANSparkMax(5, MotorType.kBrushless);
-  CANSparkMax intakeB = new CANSparkMax(6, MotorType.kBrushless);
-  CANSparkMax flywheelA = new CANSparkMax(7, MotorType.kBrushless);
-  CANSparkMax flywheelB = new CANSparkMax(8, MotorType.kBrushless);
-  CANSparkMax flap = new CANSparkMax(9, MotorType.kBrushed);
+  CANSparkMax intakePivot = new CANSparkMax(5, MotorType.kBrushless);
+  VictorSP intakeA = new VictorSP(6);
+  VictorSP intakeB = new VictorSP(7);
+  CANSparkMax flywheelA = new CANSparkMax(8, MotorType.kBrushless);
+  CANSparkMax flywheelB = new CANSparkMax(9, MotorType.kBrushless);
+  CANSparkMax flap = new CANSparkMax(10, MotorType.kBrushless);
+  CANSparkMax climbLeft = new CANSparkMax(11, MotorType.kBrushless);
+  CANSparkMax climbRight = new CANSparkMax(12, MotorType.kBrushless);
 
   //Limit Switches:
   DigitalInput intakeOut;
@@ -26,7 +29,6 @@ public class Robot extends TimedRobot {
   DigitalInput flapIn;
   DigitalInput flapOut;
 
-  
   XboxController driveController = new XboxController(0);
 
   //Variable Thingys:
@@ -47,40 +49,41 @@ public class Robot extends TimedRobot {
   double intakePivotSpeed = 0.25;
   boolean intakePivotActive;
 
-
   //Flap
   double flapSpeed = 0.25;
 
-  
   //Flywheel
   double flywheelSpeakerSpeed = 1;
   boolean flywheelActive;
   double flywheelAmpSpeed = 0.25;
+
+  //Climb
+  double climbSpeedUp = 0.75;
+  double climbSpeedDown = -1;
+
 
 
   @Override
   public void robotInit() {
   //Directionals
   driveLeftA.setInverted(true);
-  driveLeftA.burnFlash();
   driveLeftB.setInverted(true);
   driveLeftB.burnFlash();
   driveRightA.setInverted(false);
-  driveRightA.burnFlash();
   driveRightB.setInverted(false);
   driveRightB.burnFlash();
   intakePivot.setInverted(false);
   intakePivot.burnFlash();
   intakeA.setInverted(false);
-  intakeA.burnFlash();
   intakeB.setInverted(true);
-  intakeB.burnFlash();
   flywheelA.setInverted(false);
   flywheelA.burnFlash();
   flywheelB.setInverted(true);
   flywheelB.burnFlash();
   flap.setInverted(false);
   flap.burnFlash();
+  climbLeft.setInverted(false);
+  climbRight.setInverted(false);
 
   //Setting Motors Off
   driveLeftA.set(0);
@@ -93,6 +96,8 @@ public class Robot extends TimedRobot {
   flywheelA.set(0);
   flywheelB.set(0);
   flap.set(0);
+  climbLeft.set(0);
+  climbRight.set(0);
 
   //Limit Switches
   intakeOut = new DigitalInput(0);
@@ -100,7 +105,6 @@ public class Robot extends TimedRobot {
   intakePieceDetection = new DigitalInput(2);
   flapIn = new DigitalInput(3);
   flapOut = new DigitalInput(4);
-
   }
 
   @Override
@@ -117,7 +121,11 @@ public class Robot extends TimedRobot {
   driveRightA.set(driveRightPower);
   driveRightB.set(driveRightPower);
 
-  
+  if (driveController.getLeftStickButtonPressed()) //Reverse Drive Controls
+    {
+        turn *= -1;
+      }  
+  }
 
   @Override
   public void autonomousInit() {}
@@ -130,22 +138,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    forward = -driveController.getLeftY();
-    turn = -driveController.getRightX();
+    
 
-    driveLeftPower = forward - turn;
-    driveRightPower = forward + turn;
-
-    driveLeftA.set(driveLeftPower);
-    driveLeftB.set(driveLeftPower);
-    driveRightA.set(driveRightPower);
-    driveRightB.set(driveRightPower);
-
-    if (driveController.getLeftStickButtonPressed()) //Reverse Drive Controls
-    {
-        turn = (turn * -1);
-      }  
-    }
+    
     if (driveController.getAButtonPressed()) //Intake Down
     {
       intakePivot.set(intakePivotSpeed);
@@ -173,7 +168,7 @@ public class Robot extends TimedRobot {
     else if (driveController.getYButtonPressed()) //Speaker Sequence -> HOLD IT DOWN TILL COMPLETE
     {
       flywheelA.set(flywheelSpeakerSpeed);
-      flywheelB.set(flywheelSpeakerSpeed);
+      flywheelB.set(flywheelSpeakerSpeed - 5);
       intakeA.set(outakeSpeed);
       intakeB.set(outakeSpeed);
     }
@@ -198,6 +193,8 @@ public class Robot extends TimedRobot {
       flywheelA.set(0);
       flywheelB.set(0);
       flap.set(0);
+      climbLeft.set(0);
+      climbRight.set(0);
     }
     
     //Intake
@@ -231,6 +228,23 @@ public class Robot extends TimedRobot {
       intakeA.set(outakeSpeed);
       intakeB.set(outakeSpeed);
     }
+
+    //Climb
+    if (driveController.getRightBumper()) {
+      climbLeft.set(climbSpeedUp);
+      climbRight.set(climbSpeedUp);
+    } else if (driveController.getRightBumperReleased()) {
+      climbLeft.set(0);
+      climbRight.set(0);
+    }
+    if (driveController.getLeftBumper()) {
+      climbLeft.set(climbSpeedDown);
+      climbRight.set(climbSpeedDown);
+    } else if (driveController.getLeftBumperReleased()) {
+      climbLeft.set(0);
+      climbRight.set(0);
+    }
+
     //Limit Switches
     if (intakeIn.get()) //Intake In
     {
