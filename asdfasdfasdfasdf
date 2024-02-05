@@ -1,26 +1,31 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import edu.wpi.first.wpilibj.DigitalInput; 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Encoder;
 
 public class Robot extends TimedRobot {
   //Motors:
-  VictorSP driveLeftA = new VictorSP(1);
-  VictorSP driveLeftB = new VictorSP(2);
-  VictorSP driveRightA = new VictorSP(3);
-  VictorSP driveRightB = new VictorSP(4);
-  CANSparkMax intakePivot = new CANSparkMax(5, MotorType.kBrushless);
-  CANSparkMax intake = new CANSparkMax(6, MotorType.kBrushless);
-  CANSparkMax flywheelA = new CANSparkMax(8, MotorType.kBrushless);
-  CANSparkMax flywheelB = new CANSparkMax(9, MotorType.kBrushless);
+  CANSparkMax flywheelA = new CANSparkMax(1, MotorType.kBrushless);
+  CANSparkMax flywheelB = new CANSparkMax(2, MotorType.kBrushless);
+  VictorSP driveLeftA = new VictorSP(3);
+  VictorSP driveLeftB = new VictorSP(4);
+  VictorSP driveRightA = new VictorSP(5);
+  VictorSP driveRightB = new VictorSP(6);
+  CANSparkMax climbLeft = new CANSparkMax(7, MotorType.kBrushless);
+  CANSparkMax climbRight = new CANSparkMax(8, MotorType.kBrushless);
+  CANSparkMax intakePivot = new CANSparkMax(9, MotorType.kBrushless);
   CANSparkMax flap = new CANSparkMax(10, MotorType.kBrushless);
-  CANSparkMax climbLeft = new CANSparkMax(11, MotorType.kBrushless);
-  CANSparkMax climbRight = new CANSparkMax(12, MotorType.kBrushless);
+  CANSparkMax intake = new CANSparkMax(11, MotorType.kBrushless);
+  
+  //Encoders
+  
+
 
   //Limit Switches:
   DigitalInput intakeOut;
@@ -83,7 +88,6 @@ public class Robot extends TimedRobot {
   climbLeft.setInverted(false);
   climbLeft.burnFlash();
   climbRight.setInverted(false);
-  climbRight.burnFlash();
 
   //Setting Motors Off
   driveLeftA.set(0);
@@ -154,6 +158,7 @@ public class Robot extends TimedRobot {
       flywheelB.set(flywheelAmpSpeed);
       flap.set(flapSpeed);
       intake.set(outakeSpeed + 0.15);
+
     }
     else if (driveController.getBButtonReleased())
     {
@@ -161,6 +166,7 @@ public class Robot extends TimedRobot {
       flywheelB.set(0);
       flap.set(-flapSpeed);
       intake.set(0);
+
     }
     else if (driveController.getYButtonPressed()) //Speaker Sequence -> HOLD IT DOWN TILL COMPLETE
     {
@@ -173,6 +179,8 @@ public class Robot extends TimedRobot {
       flywheelA.set(0);
       flywheelB.set(0);
       intake.set(0);
+
+
     }
     
     if (driveController.getRightStickButtonPressed()) //Kill Motors
@@ -270,6 +278,8 @@ public class Robot extends TimedRobot {
   intake.set(0);
   flywheelA.set(0);
   flywheelB.set(0);
+  climbLeft.set(0);
+  climbRight.set(0);
 
   }
   @Override
